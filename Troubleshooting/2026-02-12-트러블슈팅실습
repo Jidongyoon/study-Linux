@@ -1,0 +1,28 @@
+## 🛠 Troubleshooting: /etc/fstab 설정 오류로 인한 시스템 부팅 불가 해결
+
+### 1. 문제 상황 (Issue)
+- 하드디스크 파티셔닝 및 포맷 후, 부팅 시 자동 마운트를 위해 `/etc/fstab` 파일을 수정함.
+- 재부팅 후 정상적인 GUI 화면이 뜨지 않고, **Emergency Mode(긴급 모드)** 콘솔 화면으로 진입하며 시스템 부팅이 중단됨.
+- 메시지: `Give root password for maintenance (or press Control-D to continue):`
+
+### 2. 원인 분석 (Root Cause)
+- `/etc/fstab` 파일의 마운트 옵션 설정 중 치명적인 **타이핑 오류(Typo)** 발생.
+- **잘못된 설정**: `/dev/sdb1 /mydata ext4 default 0 0`
+- **문제 지점**: 마운트 옵션 키워드는 `defaults` (복수형)여야 하나, `default` (단수형)로 잘못 기입함.
+- **결과**: 리눅스 커널이 부팅 과정에서 `/etc/fstab`을 읽어 들일 때, 정의되지 않은 옵션(`default`)을 만나자 파일 시스템 무결성을 위해 부팅 프로세스를 강제 중단함.
+
+### 3. 해결 과정 (Resolution)
+장애 복구를 위해 다음과 같은 순서로 긴급 조치를 수행함.
+
+1. **권한 획득**: 루트(root) 비밀번호를 입력하여 유지보수 쉘로 진입.
+2. **쓰기 권한 재마운트**: 기본적으로 긴급 모드에서는 파일 시스템이 읽기 전용(Read-only)일 수 있으므로, 수정을 위해 쓰기 가능 상태로 재마운트함.
+   ```bash
+   mount -o remount,rw /
+
+   설정 수정: vi 또는 nano 편집기를 이용하여 /etc/fstab 파일의 오타를 수정.
+
+default → defaults 로 변경 후 저장.
+
+검증 및 재부팅: 수정 사항 반영 후 시스템 재시작.
+
+reboot 후 재시작 
