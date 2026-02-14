@@ -1,0 +1,50 @@
+# [Troubleshooting] mdadm 실행 시 'Level does not set the mode' 오류 해결
+
+## 1. 문제 상황 (Issue)
+리눅스(Rocky Linux 9) 환경에서 `mdadm` 명령어를 사용하여 RAID 1(Mirroring) 구성을 시도하였으나, 명령어 실행 시 동작 모드 미지정으로 인해 아래와 같은 오류가 발생하며 중단됨.
+
+**[입력 명령어]**
+```bash
+mdadm --level=1 --raid-devices=2 /dev/md2 /dev/sdf1 /dev/sdg1
+
+[에러 메시지]
+
+Plaintext
+mdadm: --level does not set the mode, and so cannot be the first option
+
+2. 원인 분석 (Root Cause)
+mdadm은 다양한 동작 모드(Create, Assemble, Manage 등)를 지원하는 도구이므로, 상세 옵션을 설정하기 전에 반드시 **어떤 동작을 수행할 것인지(Mode)**를 명시해야 함.
+
+오류 원인: 새로운 장치를 생성하는 모드인 -C (또는 --create) 옵션이 누락됨.
+
+분석: --level 옵션은 상세 설정 값일 뿐 동작 모드를 결정하지 못하므로, 명령어의 첫 번째 인자로 사용될 수 없음.
+
+3. 해결 방법 (Resolution)
+장치를 새로 생성하는 동작 모드인 -C를 명령어 서두에 추가하여 재실행함.
+
+[수정된 명령어]
+mdadm -C /dev/md2 --level=1 --raid-devices=2 /dev/sdf1 /dev/sdg1
+
+[옵션 설명]
+
+-C: Create 모드 선언 (새로운 배열 생성)
+
+/dev/md2: 생성할 가상 RAID 장치명
+
+--level=1: RAID 1 (Mirroring) 방식 지정
+
+--raid-devices=2: 배열 구성에 참여할 디스크 개수
+
+/dev/sdf1 /dev/sdg1: 실제 물리 파티션 경로
+
+4. 결과 확인 (Verification)
+명령어 수정 후 정상적으로 생성 프로세스가 진행됨을 확인하였으며, 아래 명령어로 최종 상태를 검증함.
+
+# RAID 상태 요약 확인
+cat /proc/mdstat
+
+# 상세 정보 확인
+mdadm --detail /dev/md2
+
+5. 결론 (Conclusion)
+리눅스 관리 명령어를 사용할 때는 [명령어] [동작모드] [상세옵션]의 순서를 준수해야 함을 확인하였음. 특히 mdadm과 같이 다기능 도구일 경우 동작 모드(-C, -A 등)를 명확히 지정하는 것이 필수적임.
