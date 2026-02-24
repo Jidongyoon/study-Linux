@@ -1,0 +1,101 @@
+Database Management System: From Concepts to Operations
+1. DBMS & RDBMS 개념
+DBMS (Database Management System): 데이터를 효율적으로 저장, 관리, 조회하기 위한 소프트웨어 시스템.
+
+RDBMS (Relational DBMS): 데이터를 '표(Table)' 형태로 관리하며, 각 표 간의 관계를 설정하여 데이터를 구조화하는 시스템. (예: MariaDB, MySQL, Oracle)
+
+Key Concept:
+
+Primary Key (기본키): 각 행(Row)을 유일하게 식별할 수 있는 고유한 값 (중복/NULL 불가).
+
+Foreign Key (외래키): 다른 테이블의 기본키를 참조하여 테이블 간의 연결 고리를 형성함.
+
+2. SQL (Structured Query Language) 기초
+데이터베이스와 대화하기 위한 표준 언어로, 목적에 따라 크게 세 가지로 분류됩니다.
+
+🔹 DDL (Data Definition Language) - 구조 정의
+CREATE: 데이터베이스나 테이블 생성.
+
+DROP: 테이블이나 데이터베이스 삭제.
+
+ALTER: 기존 테이블 구조 변경.
+
+🔹 DML (Data Manipulation Language) - 데이터 조작
+INSERT: 새로운 데이터(행) 삽입.
+
+SELECT: 데이터 조회 및 검색.
+
+UPDATE: 기존 데이터 수정.
+
+DELETE: 데이터 삭제.
+
+🔹 DCL (Data Control Language) - 권한 제어
+GRANT: 특정 사용자에게 권한 부여.
+
+REVOKE: 부여된 권한 회수.
+
+3. MariaDB 서버 설치 및 원격 접속 환경
+Server: CentOS 7 환경에서 MariaDB 엔진 구동.
+
+Client: Windows 11 환경에서 MariaDB Client 도구를 사용하여 서버에 접속.
+
+Network: TCP/IP 3306 포트를 통해 통신하며, 서버 측 방화벽(Firewall) 설정과 유저의 원격 접속 권한('user'@'%') 설정이 필수적임.
+
+4. 실전 데이터 모델링 및 테이블 생성
+실습에서 구축한 쇼핑몰 데이터베이스 구조는 다음과 같습니다.
+
+🏠 customer 테이블 (고객 정보)
+
+컬럼명,타입,제약 조건,설명
+
+id,VARCHAR(10),PRIMARY KEY,고객 아이디 (고유 식별자)
+
+name,VARCHAR(5),NOT NULL,고객 이름
+
+age,INT,-,고객 나이
+
+address,VARCHAR(5),-,고객 주소
+
+purchase 테이블 (구매 내역)
+
+컬럼명,타입,제약 조건,설명
+
+no,INT,"PRIMARY KEY, AUTO_INCREMENT",구매 일련번호 (자동 증가)
+
+cust_id,VARCHAR(10),-,구매한 고객 아이디
+
+product,VARCHAR(5),-,구매 물품명
+
+5. 데이터 운영 실습 (Operations)
+✅ 테이블 생성 (DDL)
+
+CREATE TABLE customer (
+    id VARCHAR(10) NOT NULL PRIMARY KEY,
+    name VARCHAR(5) NOT NULL,
+    age INT,
+    address VARCHAR(5)
+);
+
+✅ 데이터 삽입 (DML)
+
+INSERT INTO customer VALUES ('hong', '홍길동', 22, '경기');
+INSERT INTO customer VALUES ('dang', '당탕이', 30, '서울');
+
+✅ 데이터 조회 (DML)
+
+-- 모든 고객의 정보 조회
+SELECT * FROM customer;
+
+-- 특정 조건의 데이터 조회
+SELECT name, address FROM customer WHERE id = 'hong';
+
+6. 결론 및 학습 성과
+Server-Client 구조 이해: 데이터베이스 서버와 클라이언트 프로그램의 역할 분담 체득.
+
+데이터 정규화 기초: 중복을 피하고 효율적으로 데이터를 쌓기 위한 테이블 설계 능력 배양.
+
+SQL 숙달: 텍스트 기반 인터페이스(CLI)를 통해 직접 쿼리를 작성하고 실행하며 데이터 제어 능력 확보.
+
+
+
+
