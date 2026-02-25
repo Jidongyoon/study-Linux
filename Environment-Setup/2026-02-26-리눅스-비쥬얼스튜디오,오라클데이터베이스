@@ -1,0 +1,49 @@
+📚 Development Environment & Database Integration
+Date: 2026-02-26
+
+Subject: Application-Database Connectivity & Enterprise DB Management
+
+1. Visual Studio & MariaDB 연동 (Application Connectivity)
+C# 기반의 Application과 MariaDB를 연결하여 데이터를 제어하는 핵심 메커니즘을 학습했습니다.
+
+🧩 핵심 개념 (Core Concepts)
+ADO.NET (SqlDataSource): .NET 환경에서 데이터베이스와 통신하기 위한 기본 구성 요소입니다.
+
+Connection String: 서버 주소, 포트, ID, Password를 포함하여 DB에 접속하기 위한 '출입 증명서' 역할을 합니다.
+
+SQL Query Execution: SELECT, INSERT 등의 쿼리를 애플리케이션에서 서버로 전송하고 결과를 받아오는 프로세스를 실습했습니다.
+
+💡 학습 포인트
+데이터베이스 서버가 로컬(내 PC)이든 리모트(리눅스 서버)든, IP와 Port만 정확하면 어디서든 연동이 가능하다는 점을 확인했습니다.
+
+실습 결과: customer 테이블의 데이터를 조회하여 애플리케이션 화면에 출력하는 Full-Cycle 성공.
+
+2. Oracle Database 18c XE (Enterprise DB Setup)
+리눅스(Rocky Linux) 환경에서 엔터프라이즈급 데이터베이스인 Oracle XE를 설치하고 운영하는 기초를 다졌습니다.
+
+🏢 아키텍처 이해 (Database Architecture)
+SGA (System Global Area): Oracle 인스턴스가 사용하는 공유 메모리 영역으로, 데이터 캐싱 및 실행 계획 공유를 담당합니다.
+
+Instance vs Database:
+
+Instance: 메모리 구조(SGA)와 백그라운드 프로세스의 집합.
+
+Database: 디스크에 저장된 물리적 데이터 파일들의 집합.
+
+Oracle Listener: 외부 클라이언트(VS 등)의 접속 요청을 받아 DB 서버로 연결해 주는 네트워크 관문입니다.
+
+🛠️ 주요 운영 명령어
+설치 및 구성: dnf install을 통한 패키지 설치 후 oracle-xe-18c configure를 통해 시스템 최적화 및 인스턴스 생성.
+
+계정 관리: SYS (최고 관리자), SYSTEM (일반 관리자) 계정의 역할 분담 및 보안 설정.
+
+3. 리눅스 환경의 CLI 도구 최적화
+리눅스 터미널에서 데이터베이스를 관리할 때의 인터페이스 특성을 학습했습니다.
+
+⌨️ SQL*Plus와 Readline
+SQL*Plus: 오라클의 기본 명령줄 인터페이스(CLI) 도구.
+
+UI/UX 개선: 기본적으로 명령어 히스토리 기능이 없는 SQL*Plus의 한계를 극복하기 위해 **rlwrap**과 같은 래퍼 도구를 활용하여 생산성을 높이는 방법을 습득했습니다.
+
+📝 총평 (Summary)
+오늘 학습을 통해 **Windows(개발 환경)**와 Linux(서버 환경) 사이에서 데이터가 어떻게 흐르는지(Data Flow) 이해하게 되었습니다. 특히 MariaDB와 Oracle이라는 서로 다른 DBMS를 경험하며, 각 시스템이 요구하는 리소스와 설정 방식의 차이를 체감할 수 있었던 유익한 세션이었습니다.
