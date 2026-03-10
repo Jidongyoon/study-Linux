@@ -1,5 +1,18 @@
- Linux System & Memory Engineering Deep Dive클라우드 엔지니어링의 기반이 되는 리눅스 커널의 메모리 관리 메커니즘과 시스템 동작 원리를 정리합니다.1. 가상 메모리(Virtual Memory)의 구조와 할당리눅스에서 프로세스는 실제 RAM 주소를 직접 보지 못하며, 커널이 생성한 가상 주소(Virtual Address) 공간에서 동작합니다.🏗️ 핵심 커널 구조체task_struct: 프로세스의 모든 상태를 담은 커널 내부의 '컨트롤 타워'.mm_struct: 프로세스가 소유한 메모리 맵의 총체.vma (Virtual Memory Area): 주소 공간을 성격별로 쪼갠 단위 (Stack, Heap, Code 등).💡 할당의 실제 (Lazy Allocation)malloc()이나 new를 호출해도 즉시 RAM이 할당되지 않습니다. 커널은 VMA 주소만 기록해두고, 실제로 데이터를 쓸 때(Access) 비로소 물리 메모리를 연결합니다.2. 페이지 폴트(Page Fault) 트러블슈팅페이지 폴트는 '에러'가 아니라, 가상 메모리를 물리 메모리로 연결하기 위한 커널의 정상적인 이벤트입니다.🔍 폴트의 종류Minor Page Fault: 메모리 어딘가엔 데이터가 있지만 매핑만 안 된 상태. (비교적 빠름)Major Page Fault: 디스크(SSD/HDD)에서 데이터를 읽어와야 하는 상태. (I/O 병목의 주원인)🛠️ 관련 명령어Bash# 특정 PID의 페이지 폴트 발생 횟수 확인 (minflt, majflt)
+ Linux System & Memory Engineering Deep Dive클라우드 엔지니어링의 기반이 되는 리눅스 커널의 메모리 관리 메커니즘과 시스템 동작 원리를 정리합니다.
+ 1. 가상 메모리(Virtual Memory)의 구조와 할당리눅스에서 프로세스는 실제 RAM 주소를 직접 보지 못하며, 커널이 생성한 가상 주소(Virtual Address) 공간에서 동작합니다.
+ 
+ 🏗️ 핵심 커널 구조체task_struct: 프로세스의 모든 상태를 담은 커널 내부의 '컨트롤 타워'.mm_struct: 프로세스가 소유한 메모리 맵의 총체.vma (Virtual Memory Area): 주소 공간을 성격별로 쪼갠 단위 (Stack, Heap, Code 등).
+ 
+ 💡 할당의 실제 (Lazy Allocation)malloc()이나 new를 호출해도 즉시 RAM이 할당되지 않습니다. 커널은 VMA 주소만 기록해두고, 실제로 데이터를 쓸 때(Access) 비로소 물리 메모리를 연결합니다.
+ 
+ 2. 페이지 폴트(Page Fault) 트러블슈팅페이지 폴트는 '에러'가 아니라, 가상 메모리를 물리 메모리로 연결하기 위한 커널의 정상적인 이벤트입니다.🔍 
+ 
+ 폴트의 종류Minor Page Fault: 메모리 어딘가엔 데이터가 있지만 매핑만 안 된 상태. (비교적 빠름)Major Page Fault: 디스크(SSD/HDD)에서 데이터를 읽어와야 하는 상태. (I/O 병목의 주원인)🛠️ 관련 
+ 
+ 명령어Bash# 특정 PID의 페이지 폴트 발생 횟수 확인 (minflt, majflt)
+
 ps -o min_flt,maj_flt,cmd -p [PID]
+
 
 # 시스템 전체의 페이지 폴트 통계 보기 (1초 간격)
 sar -B 1
