@@ -1,6 +1,7 @@
 # 📚 Infrastructure & Network Practice (2026-03-17)
 
-## 🏗️ 1. Infrastructure Architecture
+## 🏗️ 1. 인프라 아키텍처 (Infrastructure Architecture)
+
 | 구분 | 구성 요소 | 주요 역할 |
 | :--- | :--- | :--- |
 | **Web Server** | **Nginx** | HTTP 통신 전문가, 리버스 프록시, 정적 파일 고속 전송 |
